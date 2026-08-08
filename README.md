@@ -1,274 +1,92 @@
-# User Management System
-
-A simple full-stack **User Management System** built with:
-
-- **Frontend:** React + Vite
-- **Backend:** Node.js + Express.js
-- **Database:** PostgreSQL
-- **Authentication:** JWT (JSON Web Tokens) + bcrypt
-
-This project was built to be **beginner-friendly** and easy to explain in a junior developer interview.
-
----
-
-## 1. Requirements
-
-Before you start, make sure you have installed:
-
-- [Node.js](https://nodejs.org/) (v18 or higher recommended)
-- [PostgreSQL](https://www.postgresql.org/download/) (v13 or higher recommended)
-- npm (comes with Node.js)
+# 👤 User Management System
 
-Check your versions:
+## 📖 Overview
 
-```bash
-node -v
-npm -v
-psql --version
-```
+User Management System is a full-stack web application for secure user registration, authentication and user management. It uses a React frontend with a Node.js and Express backend and a PostgreSQL database.
 
----
+The project was built to demonstrate full-stack development using React for the frontend and Express with PostgreSQL for the backend. It includes JWT authentication, password hashing, protected API routes and CRUD operations.
 
-## 2. Folder Structure
+## 🎯 Project Objective
 
-```
-User-Management-System/
-├── backend/                 # Node.js + Express API
-│   ├── config/
-│   │   └── db.js            # PostgreSQL connection (pg Pool)
-│   ├── middleware/
-│   │   └── authMiddleware.js# Checks JWT token on protected routes
-│   ├── routes/
-│   │   ├── authRoutes.js    # /api/auth/register, /api/auth/login
-│   │   └── userRoutes.js    # /api/users CRUD (protected)
-│   ├── .env.example
-│   ├── package.json
-│   └── server.js            # App entry point
-│
-├── frontend/                # React + Vite app
-│   ├── src/
-│   │   ├── api/
-│   │   │   └── axios.js     # Shared axios instance + token header
-│   │   ├── components/
-│   │   │   ├── Navbar.jsx
-│   │   │   └── PrivateRoute.jsx
-│   │   ├── pages/
-│   │   │   ├── Register.jsx
-│   │   │   ├── Login.jsx
-│   │   │   ├── Dashboard.jsx
-│   │   │   └── Users.jsx
-│   │   ├── App.jsx          # Routes
-│   │   ├── main.jsx         # Entry point
-│   │   └── index.css
-│   ├── .env.example
-│   ├── index.html
-│   └── package.json
-│
-├── database/
-│   └── database.sql         # Table creation script
-│
-└── README.md
-```
+The objective of this project is to create a secure user management application where users can:
 
----
+* Register a new account.
+* Log in securely with a hashed password.
+* Stay authenticated using a JWT token.
+* View all registered users.
+* Search users by name or email.
+* Add edit and delete user records.
+* Access protected pages only after logging in.
 
-## 3. Database Setup
+## ✨ Features
 
-1. Open a terminal and log in to PostgreSQL:
+**Secure Registration**
+New users can create an account using their name email and password. Passwords are hashed with bcrypt before being saved.
 
-   ```bash
-   psql -U postgres
-   ```
+**Authenticated Login**
+Users can log in with their email and password. After a successful login the backend creates a JWT token for authentication.
 
-2. Create the database:
+**Protected Routes**
+Pages like the Dashboard and Users page can only be accessed by logged-in users. The backend also checks the JWT token before allowing access to protected data.
 
-   ```sql
-   CREATE DATABASE user_management;
-   ```
+**User Directory & Search**
+Users can view all registered users in a table and search for users by name or email.
 
-3. Connect to it:
+**Full CRUD Management**
+Users can add edit and delete user records. All changes are stored in the PostgreSQL database.
 
-   ```sql
-   \c user_management
-   ```
+**Centralized Error Handling**
+The API uses proper HTTP status codes and clear error messages. Errors are handled using try/catch and a global error handler.
 
-4. Run the schema from `database/database.sql` (copy-paste the `CREATE TABLE` statement, or run the whole file):
+## 💻 Technologies Used
 
-   ```bash
-   psql -U postgres -d user_management -f database/database.sql
-   ```
+**Frontend**
 
-This creates a `users` table with columns: `id`, `name`, `email` (unique), `password` (hashed), `created_at`.
+* React
+* Vite
+* React Router DOM
+* Axios
 
----
+**Backend**
 
-## 4. Backend Setup
+* Node.js
+* Express.js
+* PostgreSQL
 
-```bash
-cd backend
-npm install
-```
 
-Create your own `.env` file from the example:
+**Authentication & Security**
 
-```bash
-cp .env.example .env
-```
+* JWT
+* bcrypt
+* CORS
 
-Then open `.env` and update `DATABASE_URL` with your real PostgreSQL username/password.
+## 📚 What I Learned
 
-Start the backend:
+Through this project I gained practical experience in:
 
-```bash
-npm start
-```
+* Building a full-stack web application.
+* Connecting a React frontend with an Express backend using REST APIs.
+* Implementing secure authentication using JWT and bcrypt.
+* Creating protected backend routes.
+* Working with PostgreSQL databases.
+* Using SQL queries to manage data.
+* Implementing CRUD operations.
+* Handling API errors and HTTP status codes.
+* Debugging frontend and backend issues.
+* Organizing a project with a clean folder structure.
 
-or, for auto-restart during development:
+## 🚀 Future Improvements
 
-```bash
-npm run dev
-```
+Some features that could be added in future versions include:
 
-The API will run at: **http://localhost:5000**
+* Role-based access control.
+* Refresh tokens for better session security.
+* Email verification.
+* Password reset.
+* Pagination for the users table.
+* Better input validation.
+* Better mobile responsiveness.
 
----
+## ✅ Conclusion
 
-## 5. Frontend Setup
-
-Open a **new terminal** (keep the backend running):
-
-```bash
-cd frontend
-npm install
-```
-
-Create your own `.env` file:
-
-```bash
-cp .env.example .env
-```
-
-Start the frontend:
-
-```bash
-npm run dev
-```
-
-The app will run at: **http://localhost:3000**
-
----
-
-## 6. Using the App
-
-1. Go to `http://localhost:3000` → redirected to **Login**.
-2. Click **Register here** → create an account.
-3. Log in with that account.
-4. You'll land on the **Dashboard**, showing your info.
-5. Go to **Users** to add, search, edit, or delete users.
-
----
-
-## 7. How the Pieces Communicate
-
-### React ↔ Node.js
-The React app (running on port 3000) never talks to the database directly. Instead, it sends HTTP requests (via **axios**) to the Express API (running on port 5000), e.g. `GET http://localhost:5000/api/users`. Express handles the request, talks to PostgreSQL, and sends back a **JSON** response, which React then displays. `cors()` middleware on the backend allows this cross-port communication.
-
-### Node.js ↔ PostgreSQL
-The backend uses the `pg` package. A single `Pool` (in `config/db.js`) manages reusable connections to PostgreSQL. Routes call `pool.query(sql, values)` with parameterized queries (`$1`, `$2`, ...) to safely insert user input into SQL — this also protects against **SQL injection**.
-
-### Login Flow
-
-```
-User fills Login form (React)
-        ↓
-React sends POST /api/auth/login (email, password)
-        ↓
-Express finds the user by email in PostgreSQL
-        ↓
-bcrypt.compare() checks the password against the stored hash
-        ↓
-If correct → jwt.sign() creates a JWT token
-        ↓
-Token + user info sent back to React
-        ↓
-React saves token in localStorage
-        ↓
-Every future protected request sends:
-Authorization: Bearer <token>
-        ↓
-authMiddleware.js verifies the token before allowing access
-```
-
----
-
-## 8. Environment Variables
-
-**backend/.env**
-```
-PORT=5000
-DATABASE_URL=postgresql://postgres:yourpassword@localhost:5432/user_management
-JWT_SECRET=this_is_a_super_secret_key_change_it
-JWT_EXPIRES_IN=1h
-```
-
-**frontend/.env**
-```
-VITE_API_URL=http://localhost:5000/api
-```
-
----
-
-## 9. API Reference
-
-| Method | Route                | Protected? | Description               |
-|--------|-----------------------|------------|----------------------------|
-| POST   | /api/auth/register    | No         | Create a new account       |
-| POST   | /api/auth/login       | No         | Log in, returns JWT token  |
-| GET    | /api/users             | Yes        | Get all users (supports `?search=`) |
-| GET    | /api/users/:id         | Yes        | Get one user               |
-| POST   | /api/users             | Yes        | Create a user              |
-| PUT    | /api/users/:id         | Yes        | Update a user              |
-| DELETE | /api/users/:id         | Yes        | Delete a user              |
-
-**Status codes used:** `200` OK, `201` Created, `400` Bad Request, `401` Unauthorized, `403` Forbidden, `404` Not Found, `500` Server Error.
-
-Example error response:
-```json
-{ "message": "Invalid email or password." }
-```
-
----
-
-## 10. Interview Prep — Likely Questions & Short Answers
-
-**Q: Why use JWT?**
-A: JWT lets the server verify a logged-in user on every request WITHOUT storing session data on the server. The token itself carries the user's identity and is verified using a secret key.
-
-**Q: Why hash passwords with bcrypt instead of storing them directly?**
-A: If the database is ever leaked, plain text passwords would expose every user's real password. bcrypt hashing is one-way and includes salting, so even identical passwords produce different hashes and can't be reversed.
-
-**Q: Why use middleware for authentication?**
-A: Middleware lets us check the JWT token in ONE place and reuse that check across many routes, instead of repeating the same verification code in every route handler.
-
-**Q: Why PostgreSQL instead of just storing data in a file?**
-A: PostgreSQL provides structured tables, constraints (like unique email), relationships, indexing, and safely handles many simultaneous read/write operations — a text file can't do any of that reliably.
-
-**Q: Why separate the frontend and backend into two apps?**
-A: It follows a clean architecture where the frontend only handles UI/UX and the backend only handles data/business logic. They communicate over HTTP, so either side can be replaced or scaled independently (e.g. swap React for a mobile app without touching the backend).
-
-**Q: What's the difference between `POST /api/auth/register` and `POST /api/users`?**
-A: `/api/auth/register` is a public route anyone can use to create their own account. `/api/users` is a protected route (requires login) used to manage users from the Users page, similar to an admin action.
-
-**Q: What happens if the JWT token expires?**
-A: `jwt.verify()` throws an error, the middleware catches it and returns `403 Forbidden`, and the frontend would need to prompt the user to log in again.
-
-**Q: Why did you use parameterized queries (`$1, $2`) instead of building SQL strings manually?**
-A: To prevent SQL injection attacks — user input is passed as data, never concatenated directly into the SQL command.
-
----
-
-## 11. Notes
-
-- Passwords are never returned by the API — only `id`, `name`, `email`, and `created_at`.
-- All protected routes require the header: `Authorization: Bearer <token>`.
-- This project intentionally uses simple, readable code (no TypeScript, no Redux, no ORM) so every line can be explained in an interview.
+User Management System is a practical full-stack application that demonstrates secure authentication and user management. It shows how React frontend, Express backend and PostgreSQL database can work together with JWT authentication and CRUD operations.
