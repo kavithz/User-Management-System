@@ -16,7 +16,7 @@ function Dashboard() {
       <Navbar userName={user?.name} />
 
       <div className="wide-container">
-        <h1>Welcome{user ? `, ${user.name}` : ""}! 👋</h1>
+        <h1>Welcome{user ? `, ${user.name}` : ""}!</h1>
         <p>You have successfully logged in to the User Management System.</p>
 
         {user && (
