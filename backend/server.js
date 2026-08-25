@@ -7,12 +7,14 @@ const userRoutes = require("./routes/userRoutes");
 
 const app = express();
 
-// Only allow requests from the React dev server
+// Allow the frontend origin to be configured through the environment
+// Falls back to the React dev server during local development
 app.use(cors({
-  origin: "http://localhost:3000",
+  origin: process.env.FRONTEND_ORIGIN || "http://localhost:3000",
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
+
 app.options("*", cors());
 
 app.use(express.json());
