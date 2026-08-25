@@ -83,6 +83,10 @@ JWT_SECRET=your_own_secret_key
 JWT_EXPIRES_IN=1h
 ```
 
+## Local Development
+
+Backend runs on port 5001 and frontend runs on port 3000.
+
 Start the backend:
 
 ```bash
