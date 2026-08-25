@@ -52,7 +52,7 @@ router.get("/:id", async (req, res) => {
     return res.status(200).json(result.rows[0]);
   } catch (error) {
     console.error("Get user error:", error.message);
-    return res.status(500).json({ message: "Server error while fetching user." });
+    return res.status(500).json({ message: "Server error while fetching users." });
   }
 });
 
@@ -62,12 +62,27 @@ router.post("/", async (req, res) => {
     const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
-      return res.status(400).json({ message: "Name, email and password are required." });
+      return res.status(400).json({
+        message: "Name, email and password are required.",
+      });
     }
 
-    const existingUser = await pool.query("SELECT id FROM users WHERE email = $1", [email]);
+    // Keep password validation consistent with /api/auth/register
+    if (password.length < 6) {
+      return res.status(400).json({
+        message: "Password must be at least 6 characters.",
+      });
+    }
+
+    const existingUser = await pool.query(
+      "SELECT id FROM users WHERE email = $1",
+      [email]
+    );
+
     if (existingUser.rows.length > 0) {
-      return res.status(400).json({ message: "A user with this email already exists." });
+      return res.status(400).json({
+        message: "A user with this email already exists.",
+      });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -85,7 +100,9 @@ router.post("/", async (req, res) => {
     });
   } catch (error) {
     console.error("Create user error:", error.message);
-    return res.status(500).json({ message: "Server error while creating user." });
+    return res.status(500).json({
+      message: "Server error while creating user.",
+    });
   }
 });
 
@@ -96,7 +113,9 @@ router.put("/:id", async (req, res) => {
     const { name, email } = req.body;
 
     if (!name || !email) {
-      return res.status(400).json({ message: "Name and email are required." });
+      return res.status(400).json({
+        message: "Name and email are required.",
+      });
     }
 
     const result = await pool.query(
@@ -106,7 +125,9 @@ router.put("/:id", async (req, res) => {
     );
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ message: "User not found." });
+      return res.status(404).json({
+        message: "User not found.",
+      });
     }
 
     return res.status(200).json({
@@ -115,7 +136,9 @@ router.put("/:id", async (req, res) => {
     });
   } catch (error) {
     console.error("Update user error:", error.message);
-    return res.status(500).json({ message: "Server error while updating user." });
+    return res.status(500).json({
+      message: "Server error while updating user.",
+    });
   }
 });
 
@@ -130,13 +153,19 @@ router.delete("/:id", async (req, res) => {
     );
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ message: "User not found." });
+      return res.status(404).json({
+        message: "User not found.",
+      });
     }
 
-    return res.status(200).json({ message: "User deleted successfully." });
+    return res.status(200).json({
+      message: "User deleted successfully.",
+    });
   } catch (error) {
     console.error("Delete user error:", error.message);
-    return res.status(500).json({ message: "Server error while deleting user." });
+    return res.status(500).json({
+      message: "Server error while deleting user.",
+    });
   }
 });
 

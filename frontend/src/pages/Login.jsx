@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import api from "../api/axios";
 
 // onLoginSuccess is passed down from App.jsx to update who's logged in
-function Login({ onLoginSuccess }) {
+function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -20,11 +20,11 @@ function Login({ onLoginSuccess }) {
       const response = await api.post("/auth/login", { email, password });
       const { token, user } = response.data;
 
-      // Saved so the user stays logged in across page refreshes
+      // Saved so the user stays logged in across page refreshes.
+      // Dashboard and Users both read the current user from here on mount.
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
 
-      onLoginSuccess(user);
       navigate("/dashboard");
     } catch (err) {
       const message = err.response?.data?.message || "Login failed. Please try again.";
